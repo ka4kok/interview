@@ -48,11 +48,9 @@ function highlightKeywords($text, $array_of_words), функция должна 
 пробел, табуляция, перевод строки, знаки препинания (.,!?-:;) и скобки (квадратные, круглые, фигурные).
 */
 
-
-
 setlocale(LC_ALL, 'ru_RU.65001', 'rus_Rus.65001','Russian_russia', 'russian');
 
-$arr_words = ['php', 'xml', 'ООП', 'интерфейс', 'Zend'];
+$arr_words = ['php', 'xml', 'ОП', 'интерфейс', 'Zend'];
 
 $text = 'Пятая версия PHP была выпущена разработчиками 13 июля 2004 года. Изменения включают обновление ядра Zend 
 (Zend Engine 2), что существенно увеличило эффективность интерпретатора. Введена поддержка языка разметки XML.
@@ -62,12 +60,14 @@ $text = 'Пятая версия PHP была выпущена разработ�
  на предыдущих версиях языка. На данный момент последней стабильной веткой является PHP 5.3, которая содержит ряд
   изменений и дополнений';
 
-
 function highlightKeywords($text, $array_of_words) {
-    foreach ($array_of_words as $word) {
 
-        $text = preg_replace("/\b($word)\b/i", '{{$0}}', $text, 1);
+    foreach ($array_of_words as $word) {
+        $pattern = "/\b($word)\b/ui";
+        $replacement = '{{$0}}';
+        $text = preg_replace($pattern, $replacement , $text, 1);
     }
+
     return $text;
 }
 
@@ -107,16 +107,13 @@ PRIMARY KEY (`user_id`)
  */
 
 $SQL = "SELECT user_id, nickname, 
-        DAY(birthday) as day_of_birth, 
-        MONTH(birthday) as month_of_birth, 
-        YEAR(NOW()) - YEAR(birthday) as age, 
-        DayOfYear(birthday) - DayOfYear(NOW()) as 'interval'
-FROM `person` 
-ORDER BY DayOfYear(birthday) > DayOfYear(NOW()) DESC,
-		 DayOfYear(birthday) - DayOfYear(NOW()) ASC        
+       DAY(birthday) as 'day_of_birth', 
+       MONTH(birthday) as 'month_of_birth', 
+       YEAR(NOW()) - YEAR(birthday) as 'age', 
+       DayOfYear(birthday) - DayOfYear(NOW()) as 'interval'
+FROM `user` 
+WHERE DayOfYear(birthday) > DayOfYear(NOW())
+ORDER BY `interval` ASC        
 LIMIT 5";
-
-
-
 
 
